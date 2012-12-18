@@ -17,7 +17,25 @@
 		#define TILE_SIZE_WH	24					//マップチップ1枚のタイルサイズ(縦横共通, pixel)
 		#define	MAP_SIZE_WH		25					//マップのサイズ(縦横共通)
 
+		#define CHARACTER_SIZE_WH	72				//キャラクターのサイズ(縦横共通)
+
 		#define ENEMY_START_X	12					//敵が出現するX位置
 		#define ENEMY_START_Y	0					//敵が出現するY位置
 		#define ENEMY_GOAL_X	12					//敵が目指すX位置
 		#define ENEMY_GOAL_Y	24					//敵が目指すY位置
+
+		#enum WARRIOR	=0							//ウォーリアー
+		#enum KNIGHT								//ナイト
+		#enum PALADIN								//パラディン
+		#enum ROGUE									//ローグ
+		#enum ASSASIN								//アサシン
+		#enum TRICKSTAR								//トリックスター
+		#enum NINJA									//ニンジャ
+		#enum ARCHER								//アーチャー
+		#enum HUNTRESS								//ハントレス
+		#enum WIZARD								//ウィザード
+		#enum NECROMANCER							//ネクロマンサー
+		#enum MYSTIC								//ミスティック
+		#enum PRIEST								//プリースト
+		#enum SORCERER								//ソーサラー
+		#enum CHARACTER_CLASS_MAX					//職業の数

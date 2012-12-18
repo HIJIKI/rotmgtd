@@ -27,7 +27,7 @@
 		//マップチップ(上層)
 		celload "data/image/mapchip_upper_layer.png", SCR_MAPCHIP_UPPER
 		celdiv SCR_MAPCHIP_UPPER, TILE_SIZE_WH, TILE_SIZE_WH
-		
+
 		//下層マップコピー元バッファ
 		buffer SCR_MAPBUF_LOWER, TILE_SIZE_WH*MAP_SIZE_WH, TILE_SIZE_WH*MAP_SIZE_WH
 		repeat MAP_SIZE_WH
@@ -38,6 +38,10 @@
 				color ALPHA_COLOR: gmode 4, , , 256: celput SCR_MAPCHIP_LOWER, MapDataLower(x, y)
 			loop
 		loop
+
+		//キャラクター画像(とりあえずウォーリアーのみ)
+		celload "data/image/character_warrior.png", SCR_CHARACTER
+		celdiv SCR_CHARACTER, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH
 
 	//----------------------------------------------------------------------------------------------
 	//= メインウィンドウ初期化

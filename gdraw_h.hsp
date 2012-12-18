@@ -15,6 +15,21 @@
 		#enum SCR_MAPCHIP_UPPER						//上層マップチップ
 		#enum SCR_MAPBUF_LOWER						//下層マップを展開しておき、メインウィンドウへ一括コピー
 
+		#enum SCR_CHARACTER							//ウォーリアー(実際にはSCR_CHARACTER+WARRIORなどと書く(define_h.hspを参照))
+		#enum SCR_CHARACTER_KN						//ナイト
+		#enum SCR_CHARACTER_PA						//パラディン
+		#enum SCR_CHARACTER_RO						//ローグ
+		#enum SCR_CHARACTER_AS						//アサシン
+		#enum SCR_CHARACTER_TR						//トリックスター
+		#enum SCR_CHARACTER_NI						//ニンジャ
+		#enum SCR_CHARACTER_AR						//アーチャー
+		#enum SCR_CHARACTER_HU						//ハントレス
+		#enum SCR_CHARACTER_WI						//ウィザード
+		#enum SCR_CHARACTER_NE						//ネクロマンサー
+		#enum SCR_CHARACTER_MY						//ミスティック
+		#enum SCR_CHARACTER_PR						//プリースト
+		#enum SCR_CHARACTER_SO						//ソーサラー
+
 	//----------------------------------------------------------------------------------------------
 	//= gdraw系定数
 	//----------------------------------------------------------------------------------------------

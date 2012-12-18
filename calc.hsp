@@ -56,8 +56,8 @@
 		repeat ENEMY_MAX
 			if(EnemyFlag(cnt) == FALSE){
 				if(Frame\32 == 0){
-					EnemyPosX(cnt) = ENEMY_START_X*TILE_SIZE_WH+TILE_SIZE_WH/2
-					EnemyPosY(cnt) = ENEMY_START_Y*TILE_SIZE_WH+TILE_SIZE_WH/2
+					EnemyPosX(cnt) = double(ENEMY_START_X*TILE_SIZE_WH+TILE_SIZE_WH/2)
+					EnemyPosY(cnt) = double(ENEMY_START_Y*TILE_SIZE_WH+TILE_SIZE_WH/2)
 					EnemyAng(cnt) = 90.0
 					EnemySpd(cnt) = 3.0
 					EnemyFlag(cnt) = TRUE
