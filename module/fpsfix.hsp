@@ -1,0 +1,49 @@
+//--------------------------------------------------------------------------------------------------
+//= FPS固定モジュール
+//--------------------------------------------------------------------------------------------------
+// 指定されたFPSになるようにウェイトする命令を追加する
+//--------------------------------------------------------------------------------------------------
+	#module _fps_fix_
+		#uselib "winmm"
+		#cfunc timeGetTime "timeGetTime"
+		//初期化
+		#deffunc fpsfix_init
+			lasttime = timeGetTime()
+			fpsfix_set 60
+		return
+		//FPSを設定
+		#deffunc fpsfix_set int _fps
+			waittime = 1000/_fps
+		return
+		//ウェイト命令
+		#deffunc fpsfix_wait
+			repeat
+				time = timeGetTime()
+				if time-lasttime > waittime {
+					lasttime = timeGetTime()
+					taiki = cnt
+					break
+				}
+				await 1
+			loop
+			lasttime = time
+		return
+	#global
+	fpsfix_init
+
+//--------------------------------------------------------------------------------------------------
+//= 以下サンプル
+//--------------------------------------------------------------------------------------------------
+#if 0
+	#include "d3m.hsp"
+	*__main
+	
+		title ""+d3getfps()+"fps"
+		color c,c,c : boxf
+		pos 0,0 : color 255-c, 255-c, 255-c : mes c
+		
+		fpsfix_wait
+
+		c++	
+	goto *__main
+#endif

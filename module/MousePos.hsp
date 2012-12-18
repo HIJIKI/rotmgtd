@@ -1,0 +1,36 @@
+//--------------------------------------------------------------------------------------------------
+//= MousePos関数
+//--------------------------------------------------------------------------------------------------
+//	現在gselされてるウィンドウに対してのマウス座標を返す関数
+//	使い方はmousexやmouseyと同じだが、画面外でも座標を返す点が異なる
+//--------------------------------------------------------------------------------------------------
+//	MousePosX()
+//		マウスのX座標を返す, 引数はない
+//	MousePosY()
+//		マウスのY座標を返す, 引数はない
+//--------------------------------------------------------------------------------------------------
+#module _MousePos_
+	#defcfunc local WindowEdge
+		edge = (ginfo_wx2-ginfo_wx1-ginfo_winx)/2
+	return edge
+	#defcfunc MousePosX
+		x = ginfo_mx-ginfo_wx1-WindowEdge@_MousePos_()
+	return x
+	#defcfunc MousePosY
+		y = ginfo_my-ginfo_wy2+ginfo_winy+WindowEdge@_MousePos_()
+	return y
+#global
+
+//--------------------------------------------------------------------------------------------------
+//= 以下サンプル
+//--------------------------------------------------------------------------------------------------
+#if 0
+	*__main
+		redraw 0:color 255,255,255:boxf:color:pos 0, 0
+		mes "MousePosX() = "+MousePosX()
+		mes "MousePosY() = "+MousePosY()
+		mes "     mousex = "+mousex
+		mes "     mousey = "+mousey
+		redraw 1:await 10
+	goto *__main
+#endif

@@ -1,0 +1,61 @@
+;---------------------------------------------------------------------------------------------------
+; Timer
+;---------------------------------------------------------------------------------------------------
+; timer_start ～ timer_end までにかかった時間を計測するためのモジュール
+; 複数管理可能
+;---------------------------------------------------------------------------------------------------
+#module timer
+	#uselib "winmm"
+	#cfunc timeGetTime "timeGetTime"
+	#deffunc timer_init
+		dim timer_s			;スタート時点でのカウンタ
+		dim timer_e			;エンド時点でのカウンタ
+		dim timer_ms		;s～eにかかったms (timer_e - timer_s)
+		timer_count = 0		;タイマーをいくつ使用しているかのカウント
+		sdim timer_n, 24	;名前
+	return
+	#deffunc timer_start int _num, str _name
+		timer_n(_num) = ""+_name
+		timer_s(_num) = timeGetTime()
+	return
+	#deffunc timer_end int _num
+		timer_e(_num) = timeGetTime()
+		timer_ms(_num) = timer_e(_num) - timer_s(_num)
+		timer_count++
+	return
+	#defcfunc timer_cnt
+	return timer_count
+	#defcfunc timer_put int _num
+		ret = ""+timer_n(_num)+":"+timer_ms(_num)+"ms"
+	return ret
+	#defcfunc timer_total
+		tmp = 0
+		repeat timer_cnt()
+			tmp=tmp+timer_ms(cnt)
+		loop
+		ret = "合計:"+tmp+"ms"
+	return ret
+	
+#global
+timer_init
+;---------------------------------------------------------------------------------------------------
+;以下サンプル
+;---------------------------------------------------------------------------------------------------
+#if 0
+	screen 0
+	timer_init
+
+	timer_start timer_cnt(), "クラス"+timer_cnt()
+		await 16
+	timer_end timer_cnt()
+	timer_start timer_cnt(), "クラス"+timer_cnt()
+		await 32
+	timer_end timer_cnt()
+	timer_start timer_cnt(), "クラス"+timer_cnt()
+		await 1
+	timer_end timer_cnt()
+	
+	repeat timer_cnt()
+		mes ""+timer_put(cnt)
+	loop
+#endif

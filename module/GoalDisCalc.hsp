@@ -1,0 +1,67 @@
+//--------------------------------------------------------------------------------------------------
+//= 各座標のゴールまでの距離(マス数)を算出するための命令
+//--------------------------------------------------------------------------------------------------
+	#module _GoalDisCalc_
+	//----------------------------------------------------------------------------------------------
+	//= メイン命令
+	//----------------------------------------------------------------------------------------------
+		#deffunc GoalDisCalc
+			//初期化
+			repeat MAP_SIZE_WH@
+				x = cnt
+				repeat MAP_SIZE_WH@
+					y = cnt
+					MapGoalDis@(x, y) = -1
+				loop
+			loop
+			//ゴール地点に0をセット
+			MapGoalDis@(ENEMY_GOAL_X@, ENEMY_GOAL_Y@) = 0
+			//次にどの座標をチェックすればよいかを記憶しておくための配列(随時拡張する)
+			dim GoalDisCheckX, 1 : dim GoalDisCheckY, 1
+			GoalDisCheckX(0) = ENEMY_GOAL_X@ : GoalDisCheckY(0) = ENEMY_GOAL_Y@
+			//ゴールまでの距離算出
+			repeat
+				i = cnt
+				//nextをクリア
+				dim GoalDisNextX : dim GoalDisNextY : CheckIdx = 0
+				//チェック開始
+				repeat length(GoalDisCheckX)
+					x = GoalDisCheckX(cnt)
+					y = GoalDisCheckY(cnt)
+					GoalDisSet x-1, y, i
+					GoalDisSet x+1, y, i
+					GoalDisSet x, y-1, i
+					GoalDisSet x, y+1, i
+				loop
+				//次回チェックすべき回数が0回だった場合ループを終了
+				if(CheckIdx == 0){
+					break
+				} else {
+					//NextをCheckへコピー
+					dim GoalDisCheckX : dim GoalDisCheckY
+					repeat CheckIdx
+						GoalDisCheckX(cnt) = GoalDisNextX(cnt)
+						GoalDisCheckY(cnt) = GoalDisNextY(cnt)
+					loop
+				}
+			loop
+		return
+	//----------------------------------------------------------------------------------------------
+	//= 命令内で使用するサブ命令
+	//----------------------------------------------------------------------------------------------
+		#deffunc GoalDisSet int _x, int _y, int _i
+			//ルート有効範囲内か
+			if(_x >= 0)&(_x <= MAP_SIZE_WH@-1)&(_y >= 0)&(_y <= MAP_SIZE_WH@-1){
+				//指定座標に障害物がないか
+				if(MapDataLower@(_x, _y) != 1)&(MapDataLower@(_x, _y) != 2)&(MapDataUpper@(_x, _y) == 0){
+					//指定座標の[MapGoalDis]が[[_i+1]より[大きい]]もしくは[-1]であれば指定座標へ[_i+1]を代入
+					if(MapGoalDis@(_x, _y) > _i+1)|(MapGoalDis@(_x, _y) = -1){
+						MapGoalDis@(_x, _y) = _i+1
+						GoalDisNextX(CheckIdx) = _x
+						GoalDisNextY(CheckIdx) = _y
+						CheckIdx++
+					}
+				}
+			}
+		return
+	#global

@@ -1,0 +1,80 @@
+//--------------------------------------------------------------------------------------------------
+//= calc.hsp
+//--------------------------------------------------------------------------------------------------
+
+	timer_start timer_cnt(), "計算"
+
+	//----------------------------------------------------------------------------------------------
+	//= キー入力監視(GetKeyInputモジュール)
+	//----------------------------------------------------------------------------------------------
+		CheckKeyInput
+
+	//----------------------------------------------------------------------------------------------
+	//= カーソルを当てているマスを取得
+	//----------------------------------------------------------------------------------------------
+		mx = MousePosX()
+		my = MousePosY()
+		if(mx >= 0)&(mx <= WINDOW_SIZE_W-1-MENU_SIZE_W)&(my >= 0)&(my <= WINDOW_SIZE_H-1){
+			CursorPosX = MousePosX()/TILE_SIZE_WH
+			CursorPosY = MousePosY()/TILE_SIZE_WH
+		} else {
+			//カーソルがマップ内に無い場合は-1
+			CursorPosX = -1
+			CursorPosY = -1
+		}
+
+	//----------------------------------------------------------------------------------------------
+	//= マップエディット(上層チップ)
+	//----------------------------------------------------------------------------------------------
+		if(CursorPosX != -1)&(CursorPosY != -1) {
+			//左クリック
+			if(GetKeyInput(MO_LEFT) != 0){
+				if(MapDataLower(CursorPosX, CursorPosY) == 0){
+					if(MapDataUpper(CursorPosX, CursorPosY) != 1){
+						MapDataUpper(CursorPosX, CursorPosY) = 1
+					}
+				}
+			}
+			//右クリック
+			if(GetKeyInput(MO_RIGHT) != 0){
+				if(MapDataLower(CursorPosX, CursorPosY) == 0){
+					if(MapDataUpper(CursorPosX, CursorPosY) != 0){
+						MapDataUpper(CursorPosX, CursorPosY) = 0
+					}
+				}
+			}
+		}
+
+	//----------------------------------------------------------------------------------------------
+	//= 各座標のゴールまでの座標を取得(一時的)
+	//----------------------------------------------------------------------------------------------
+		GoalDisCalc
+
+	//----------------------------------------------------------------------------------------------
+	//= 敵の出現処理
+	//----------------------------------------------------------------------------------------------
+		repeat ENEMY_MAX
+			if(EnemyFlag(cnt) == FALSE){
+				if(Frame\32 == 0){
+					EnemyPosX(cnt) = ENEMY_START_X*TILE_SIZE_WH+TILE_SIZE_WH/2
+					EnemyPosY(cnt) = ENEMY_START_Y*TILE_SIZE_WH+TILE_SIZE_WH/2
+					EnemyAng(cnt) = 90.0
+					EnemySpd(cnt) = 3.0
+					EnemyFlag(cnt) = TRUE
+					break
+				}
+			}
+		loop
+
+	//----------------------------------------------------------------------------------------------
+	//= 敵の移動処理
+	//----------------------------------------------------------------------------------------------
+		repeat ENEMY_MAX
+			if(EnemyFlag(cnt) == TRUE){
+				EnemyPosX(cnt) += cos(deg2rad(EnemyAng(cnt)))*EnemySpd(cnt)
+				EnemyPosY(cnt) += sin(deg2rad(EnemyAng(cnt)))*EnemySpd(cnt)
+				if(EnemyPosY(cnt) > WINDOW_SIZE_H){EnemyFlag(cnt)=FALSE}
+			}
+		loop
+
+	timer_end timer_cnt()

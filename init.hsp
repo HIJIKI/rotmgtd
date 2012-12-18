@@ -1,0 +1,45 @@
+//--------------------------------------------------------------------------------------------------
+//= init_h.hsp
+//--------------------------------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------------------------
+	//= グローバル配列
+	//----------------------------------------------------------------------------------------------
+		dim MapDataLower, MAP_SIZE_WH, MAP_SIZE_WH			//下層マップのデータ
+		dim MapDataUpper, MAP_SIZE_WH, MAP_SIZE_WH			//上層マップのデータ
+		dim MapGoalDis, MAP_SIZE_WH, MAP_SIZE_WH			//各座標のゴールまでの距離
+		#include "module/basemap.hsp"						//マップを初期化
+
+		#define ENEMY_MAX	64
+		dim EnemyFlag, ENEMY_MAX
+		ddim EnemyPosX, ENEMY_MAX
+		ddim EnemyPosY, ENEMY_MAX
+		ddim EnemyAng, ENEMY_MAX
+		ddim EnemySpd, ENEMY_MAX
+
+	//----------------------------------------------------------------------------------------------
+	//= 画像バッファ初期化
+	//----------------------------------------------------------------------------------------------
+		//マップチップ(下層)
+		celload "data/image/mapchip_lower_layer.png", SCR_MAPCHIP_LOWER
+		celdiv SCR_MAPCHIP_LOWER, TILE_SIZE_WH, TILE_SIZE_WH
+
+		//マップチップ(上層)
+		celload "data/image/mapchip_upper_layer.png", SCR_MAPCHIP_UPPER
+		celdiv SCR_MAPCHIP_UPPER, TILE_SIZE_WH, TILE_SIZE_WH
+		
+		//下層マップコピー元バッファ
+		buffer SCR_MAPBUF_LOWER, TILE_SIZE_WH*MAP_SIZE_WH, TILE_SIZE_WH*MAP_SIZE_WH
+		repeat MAP_SIZE_WH
+			x = cnt
+			repeat MAP_SIZE_WH
+				y = cnt
+				pos x*TILE_SIZE_WH, y*TILE_SIZE_WH
+				color ALPHA_COLOR: gmode 4, , , 256: celput SCR_MAPCHIP_LOWER, MapDataLower(x, y)
+			loop
+		loop
+
+	//----------------------------------------------------------------------------------------------
+	//= メインウィンドウ初期化
+	//----------------------------------------------------------------------------------------------
+		screen SCR_MAIN, WINDOW_SIZE_W, WINDOW_SIZE_H
