@@ -10,13 +10,14 @@
 		//= äeç¿ïWÇÃÉSÅ[ÉãÇ‹Ç≈ÇÃãóó£
 		//------------------------------------------------------------------------------------------
 			#if TRUE
+				tmp = MapGoalDis(ENEMY_START_X, ENEMY_START_Y)
 				font msgothic, 9
 				color 255,255,255
 				repeat MAP_SIZE_WH
 					x = cnt
 					repeat MAP_SIZE_WH
 						y = cnt
-						if(MapGoalDis(x, y) != -1){
+						if(MapGoalDis(x, y) <= tmp)&(MapGoalDis(x, y) != -1){
 							pos x*TILE_SIZE_WH+6, y*TILE_SIZE_WH+6
 							mes ""+MapGoalDis(x, y)
 						}

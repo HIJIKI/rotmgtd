@@ -1,0 +1,10 @@
+;boxf‚Å‚Í‚Å‚«‚È‚¢u˜gü‚¾‚¯‚ğ•`‰æv‚·‚ébox–½—ß
+#module "box_only_line"
+#deffunc boxl int x,int y,int x2,int y2
+;•`‰æ
+line x,y,x,y2
+line x,y2,x2,y2
+line x2,y2,x2,y
+line x2,y,x,y
+return
+#global
