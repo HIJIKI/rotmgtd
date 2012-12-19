@@ -1,0 +1,12 @@
+//--------------------------------------------------------------------------------------------------
+//= enemy_h.hsp
+//--------------------------------------------------------------------------------------------------
+
+	#define ENEMY_MAX	64
+	dim EnemyFlag,			ENEMY_MAX						//敵の生存フラグ
+	ddim EnemyPosX,			ENEMY_MAX						//敵のX座標
+	ddim EnemyPosY,			ENEMY_MAX						//敵のY座標
+	ddim EnemyMoveAng,		ENEMY_MAX						//敵の移動方向(Angle)
+	ddim EnemyMoveSpd,		ENEMY_MAX						//敵の移動速度(Speed)
+	dim EnemyMoveTargetX,	ENEMY_MAX						//敵の目標X座標(マス)
+	dim EnemyMoveTargetY,	ENEMY_MAX						//敵の目標Y座標(マス)

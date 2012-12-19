@@ -1,0 +1,76 @@
+//--------------------------------------------------------------------------------------------------
+//= enemy.hsp
+//--------------------------------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------------------------
+	//= 出現処理(一時的)
+	//----------------------------------------------------------------------------------------------
+		repeat ENEMY_MAX
+			if(EnemyFlag(cnt) == FALSE){
+				if(Frame\32 == 0){
+					EnemyPosX(cnt) = double(ENEMY_START_X*TILE_SIZE_WH+TILE_SIZE_WH/2)
+					EnemyPosY(cnt) = double(ENEMY_START_Y*TILE_SIZE_WH+TILE_SIZE_WH/2)
+					EnemyMoveTargetX(cnt) = int(EnemyPosX(cnt)/TILE_SIZE_WH)
+					EnemyMoveTargetY(cnt) = int(EnemyPosY(cnt)/TILE_SIZE_WH)
+					EnemyMoveAng(cnt) = 90.0
+					EnemyMoveSpd(cnt) = 3.0
+					EnemyFlag(cnt) = TRUE
+					break
+				}
+			}
+		loop
+
+	//----------------------------------------------------------------------------------------------
+	//= 移動処理
+	//----------------------------------------------------------------------------------------------
+		repeat ENEMY_MAX
+			i = cnt
+			if(EnemyFlag(i) == TRUE){
+				//移動量反映
+				EnemyPosX(i) += cos(deg2rad(EnemyMoveAng(i)))*EnemyMoveSpd(i)
+				EnemyPosY(i) += sin(deg2rad(EnemyMoveAng(i)))*EnemyMoveSpd(i)
+				//画面外へ出た場合はFlagをFALSEに
+				if(EnemyPosX(i) < 0)|(EnemyPosX(i) > TILE_SIZE_WH*MAP_SIZE_WH)|(EnemyPosY(i) < 0)|(EnemyPosY(i) > TILE_SIZE_WH*MAP_SIZE_WH){
+					EnemyFlag(i) = FALSE
+				}
+				//ゴールへ到達した場合は無条件で下へ向かう
+				y = int(EnemyPosY(i)/TILE_SIZE_WH)
+				if(y >= ENEMY_GOAL_Y){
+					EnemyMoveTargetX(i) = -1
+					EnemyMoveTargetY(i) = -1
+					EnemyMoveAng(i) = 90.0
+				} else {
+					//ターゲット座標へ到達したか
+					x1 = int(EnemyPosX(i)) : x2 = int(EnemyMoveTargetX(i)*TILE_SIZE_WH+TILE_SIZE_WH/2)
+					y1 = int(EnemyPosY(i)) : y2 = int(EnemyMoveTargetY(i)*TILE_SIZE_WH+TILE_SIZE_WH/2)
+					s = int(EnemyMoveSpd(i))
+					if(getcoli_dis(x1, y1, x2, y2, s) == TRUE){
+						//到達していた場合次のターゲット座標を決める
+						EnemyPosX(i) = double(EnemyMoveTargetX(i)*TILE_SIZE_WH+TILE_SIZE_WH/2)
+						EnemyPosY(i) = double(EnemyMoveTargetY(i)*TILE_SIZE_WH+TILE_SIZE_WH/2)
+						dis = 768	//上下左右どこが一番GoalDisが低いかを探すための変数
+						x = int(EnemyPosX(i)/TILE_SIZE_WH)	//マス上の座標
+						y = int(EnemyPosY(i)/TILE_SIZE_WH)
+						//4方向のうち一番GoalDisの数値が低いマスを探す
+						repeat 4
+							j = cnt
+							tmpx = x : tmpy = y
+							if(j == 0){tmpy+1 : ang = 90.0}		//down
+							if(j == 1){tmpx-1 : ang = 180.0}	//left
+							if(j == 2){tmpx+1 : ang = 0.0}		//right
+							if(j == 3){tmpy-1 : ang = 270.0}	//up
+							//有効範囲内であるかどうか
+							if(tmpx >= 1)&(tmpx <= MAP_SIZE_WH-2)&(tmpy >= 0)&(tmpy <= MAP_SIZE_WH-1){
+								//GoalDisを調べる
+								if((dis > MapGoalDis(tmpx, tmpy))&(MapGoalDis(tmpx, tmpy) != -1)){
+									dis = MapGoalDis(tmpx, tmpy)
+									EnemyMoveAng(i) = ang
+									EnemyMoveTargetX(i) = tmpx
+									EnemyMoveTargetY(i) = tmpy
+								}
+							}
+						loop
+					}
+				}
+			}
+		loop

@@ -51,7 +51,7 @@
 	//----------------------------------------------------------------------------------------------
 		#deffunc GoalDisSet int _x, int _y, int _i
 			//ルート有効範囲内か
-			if(_x >= 0)&(_x <= MAP_SIZE_WH@-1)&(_y >= 0)&(_y <= MAP_SIZE_WH@-1){
+			if(_x >= 0)&(_x <= MAP_SIZE_WH@-2)&(_y >= 0)&(_y <= MAP_SIZE_WH@-1){
 				//指定座標に障害物がないか
 				if(MapDataLower@(_x, _y) != 1)&(MapDataLower@(_x, _y) != 2)&(MapDataUpper@(_x, _y) == 0){
 					//指定座標の[MapGoalDis]が[[_i+1]より[大きい]]もしくは[-1]であれば指定座標へ[_i+1]を代入

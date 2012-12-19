@@ -38,7 +38,7 @@
 		sysfont:color 255
 		repeat ENEMY_MAX
 			if(EnemyFlag(cnt) == TRUE){
-				pos EnemyPosX(cnt)-8, EnemyPosY(cnt)-8
+				pos EnemyPosX(cnt)-7, EnemyPosY(cnt)-8
 				mes "Åú"
 			}
 		loop

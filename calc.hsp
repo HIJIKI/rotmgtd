@@ -51,30 +51,8 @@
 		GoalDisCalc
 
 	//----------------------------------------------------------------------------------------------
-	//= “G‚ÌoŒ»ˆ—
+	//= “G‚Ìˆ—
 	//----------------------------------------------------------------------------------------------
-		repeat ENEMY_MAX
-			if(EnemyFlag(cnt) == FALSE){
-				if(Frame\32 == 0){
-					EnemyPosX(cnt) = double(ENEMY_START_X*TILE_SIZE_WH+TILE_SIZE_WH/2)
-					EnemyPosY(cnt) = double(ENEMY_START_Y*TILE_SIZE_WH+TILE_SIZE_WH/2)
-					EnemyAng(cnt) = 90.0
-					EnemySpd(cnt) = 3.0
-					EnemyFlag(cnt) = TRUE
-					break
-				}
-			}
-		loop
-
-	//----------------------------------------------------------------------------------------------
-	//= “G‚ÌˆÚ“®ˆ—
-	//----------------------------------------------------------------------------------------------
-		repeat ENEMY_MAX
-			if(EnemyFlag(cnt) == TRUE){
-				EnemyPosX(cnt) += cos(deg2rad(EnemyAng(cnt)))*EnemySpd(cnt)
-				EnemyPosY(cnt) += sin(deg2rad(EnemyAng(cnt)))*EnemySpd(cnt)
-				if(EnemyPosY(cnt) > WINDOW_SIZE_H){EnemyFlag(cnt)=FALSE}
-			}
-		loop
+		#include "enemy.hsp"
 
 	timer_end timer_cnt()

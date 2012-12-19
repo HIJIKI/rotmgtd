@@ -10,13 +10,6 @@
 		dim MapGoalDis, MAP_SIZE_WH, MAP_SIZE_WH			//各座標のゴールまでの距離
 		#include "module/basemap.hsp"						//マップを初期化
 
-		#define ENEMY_MAX	64
-		dim EnemyFlag, ENEMY_MAX
-		ddim EnemyPosX, ENEMY_MAX
-		ddim EnemyPosY, ENEMY_MAX
-		ddim EnemyAng, ENEMY_MAX
-		ddim EnemySpd, ENEMY_MAX
-
 	//----------------------------------------------------------------------------------------------
 	//= 画像バッファ初期化
 	//----------------------------------------------------------------------------------------------

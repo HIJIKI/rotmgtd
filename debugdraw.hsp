@@ -12,7 +12,7 @@
 			#if TRUE
 				tmp = MapGoalDis(ENEMY_START_X, ENEMY_START_Y)
 				font msgothic, 9
-				color 255,255,255
+				color 200,200,200
 				repeat MAP_SIZE_WH
 					x = cnt
 					repeat MAP_SIZE_WH
@@ -23,7 +23,22 @@
 						}
 					loop
 				loop
-				sysfont
+			#endif
+
+		//------------------------------------------------------------------------------------------
+		//= 各敵キャラのターゲット座標
+		//------------------------------------------------------------------------------------------
+			#if TRUE
+				color 255,255,255
+				repeat ENEMY_MAX
+					if(EnemyFlag(cnt) == TRUE){
+						x1 = EnemyPosX(cnt) : x2 = (EnemyMoveTargetX(cnt)*TILE_SIZE_WH)+(TILE_SIZE_WH/2)
+						y1 = EnemyPosY(cnt) : y2 = (EnemyMoveTargetY(cnt)*TILE_SIZE_WH)+(TILE_SIZE_WH/2)
+						if(x2 >= 0){
+							line x1, y1, x2, y2
+						}
+					}
+				loop
 			#endif
 
 		//------------------------------------------------------------------------------------------
@@ -35,16 +50,25 @@
 				mes ""+PROGRAM_NAME+" ver"+PROGRAM_VERSION
 			#endif
 
+		//------------------------------------------------------------------------------------------
+		//= 敵の数を計算
+		//------------------------------------------------------------------------------------------
+			EnemyTrueCnt = 0
+			repeat ENEMY_MAX
+				if(EnemyFlag(cnt) == TRUE){EnemyTrueCnt++}
+			loop
+
 			timer_end timer_cnt()
 
 		//------------------------------------------------------------------------------------------
 		//= メニューボードデバッグ表示
 		//------------------------------------------------------------------------------------------
 			#if TRUE
-				color 255,255,255
+				sysfont:color 255,255,255
 				pos MENU_POS_X+8, MENU_POS_Y+8
 				mes "----debug----"
 				mes "カーソル:"+CursorPosX+","+CursorPosY
+				mes "敵の数:"+EnemyTrueCnt
 				mes "----timer----"
 				repeat timer_cnt()
 					mes ""+timer_put(cnt)
