@@ -1,0 +1,79 @@
+#module _ChamferFill_
+	//----------------------------------------------------------------------------------------------
+	//= èâä˙âª
+	//----------------------------------------------------------------------------------------------
+	#deffunc ChamferFillInit int _c
+		Corner = limit(_c, 0, 128)
+	return
+	//----------------------------------------------------------------------------------------------
+	//= ÉÅÉCÉì
+	//----------------------------------------------------------------------------------------------
+	#deffunc ChamferFill int _x, int _y, int _w, int _h
+		SizeW = _w : SizeH = _h
+		if(SizeW<Corner*2+1){SizeW = Corner*2+1}
+		if(SizeH<Corner*2+1){SizeH = Corner*2+1}
+		//è„
+		repeat Corner
+			tmp = Corner-cnt
+			boxf _x+tmp, _y+cnt, _x+SizeW-1-tmp, _y+cnt
+		loop
+		//íÜ
+		boxf _x, _y+Corner, _x+SizeW-1, _y+SizeH-1-Corner
+		//â∫
+		repeat Corner
+			tmp = Corner-cnt
+			boxf _x+tmp, _y+SizeH-1-cnt, _x+SizeW-1-tmp, _y+SizeH-1-cnt
+		loop
+	return
+#global
+ChamferFillInit 4
+
+//--------------------------------------------------------------------------------------------------
+//= à»â∫ÉTÉìÉvÉã
+//--------------------------------------------------------------------------------------------------
+#if 0
+	CountAdd = 1
+	*__main
+		//èàóù
+		if(Frame\3==0){
+			Count += CountAdd
+			if(Count==0)|(Count==19){
+				CountAdd *= -1
+			}
+		}
+
+		stick ky
+		if(mousex>=480)&(mousex<=480+128)&(mousey>=300)&(mousey<=300+64){
+			if(ky & 256){end}
+			ButtonColor = 224, 224/2, 224/3
+		} else {
+			ButtonColor = 224/3, 224/2, 224
+		}
+
+		//ï`âÊ
+		redraw 0
+
+		ChamferFillInit 4
+		color:boxf
+		x = 16:y = 16:w = 608:h = 16
+		repeat Count
+			color ,255-cnt*12
+			ChamferFill x+cnt*cnt, y, w-cnt*32, h
+			y += h+8
+		loop
+
+		ChamferFillInit 16
+		color ButtonColor(0), ButtonColor(1), ButtonColor(2)
+		ChamferFill 480, 300, 128, 64
+
+		color 255,255,255
+		font msgothic, 24, 1
+		pos 518, 320
+		mes "exit"
+		
+		Frame++
+		await 16
+
+		redraw 1
+	goto *__main
+#endif
