@@ -49,4 +49,4 @@
 
 		//リセットボタンを追加(一時的)
 		pos MENU_POS_X+MENU_SIZE_W/2-64/2, ginfo_winy-64
-		lab = *__MapLowerReset : mgButton "Reset", lab, 64, 27, 1
+		mgButton "Reset", *__MapLowerReset, , , 64, 27, 1

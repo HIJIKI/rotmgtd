@@ -1,15 +1,19 @@
 //--------------------------------------------------------------------------------------------------
-//= rotmg風ボタンモジュール
+//= rotmg風ボタンモジュール v2
 //--------------------------------------------------------------------------------------------------
 //	MAD GOD風のボタンサービスを提供するモジュールです。
 //	HSP標準の button 命令のような、複数ウィンドウへの設置は対応しておりません。
 //	ボタンを重ねて設置し、どちらにもマウスを当てた状態でクリックすると、
-//	どちらのジャンプも実行されてしまう点に注意してください。
+//	どちらのジャンプも順番に実行されてしまう点に注意してください。
 //	ボタンの描画自体は、ボタンIDが若いものが後ろに表示されます。
+//	ボタンがクリックされた時に、システム変数statへクリックしたボタンIDが代入されます。
 //	このモジュールより先にChamferFillモジュールをincludeすれば、ボタンの描画に使用されます。
 //	このモジュールより先にMousePosモジュールをincludeすれば、ボタンのクリック判定に使用されます。
 //--------------------------------------------------------------------------------------------------
+#define	mgButton(%1="", %2, %3=ginfo_cx, %4=ginfo_cy, %5=54, %6=27, %7=0)	_l=%2:_mgButton ""+%1, _l, %3, %4, %5, %6, %7
+#define	mgButtonPrm(%1, %2=-1, %3=-1, %4="", %5="", %6="", %7="", %8="")	_txt=%2:_l=%3:_x=%4:_y=%5:_w=%6:_h=%7:_t=%8:_mgButtonPrm %1, _txt, _l, _x, _y, _w, _h, _t
 #define mgButtonClear(%1=-1) _mgButtonClear %1
+
 #module _mgButton_
 	//----------------------------------------------------------------------------------------------
 	//= モジュール内で使用するWin32 API
@@ -23,6 +27,12 @@
 	#define BG_COLOR		255,255,255
 	#define BG_COLOR_HOVER	255,220,133
 	#define TEXT_COLOR		54,54,54
+
+	//----------------------------------------------------------------------------------------------
+	//= モジュール内で使用する命令(渡された変数をstatへ代入)
+	//----------------------------------------------------------------------------------------------
+	#deffunc local SetStat int _p
+	return _p
 
 	//----------------------------------------------------------------------------------------------
 	//= 初期化命令(include時に自動実行)
@@ -41,32 +51,28 @@
 		 dim ButtonType,		ButtonMax	//ジャンプのタイプ(goto/gosub)
 	return
 
+	button
+
 	//----------------------------------------------------------------------------------------------
 	//= ボタン設置命令
 	//----------------------------------------------------------------------------------------------
-	//	mgButton "text", *label, p1, p2, p3
+	//	mgButton "text", *label, p1, p2, p3, p4, p5
 	//
 	//	"text" = ボタンのテキスト
-	//	*label = 押した時にジャンプするラベル(変数)
-	//	p1 = ボタンの縦幅
-	//	p2 = ボタンの横幅
-	//	p3 = 挙動のタイプ
+	//	*label = 押した時にジャンプするラベル
+	//	p1 = 左上X座標
+	//	p2 = 左上Y座標
+	//	p3 = 縦幅
+	//	p4 = 横幅
+	//	p5 = 挙動のタイプ
 	//----------------------------------------------------------------------------------------------
-	//	カレントポジションにボタンを設置する命令。
-	//	パラメータは全て省略不可。
-	//	p3 が 0ならば goto / 0以外ならば gosub として動作します。
-	//
-	//	*label は ラベルを代入した変数でなければなりません。
-	//	例：
-	//
-	//		lab = *start　───┐
-	//　　　　　　　　　　　　　↓
-	//		mgButton "始める", lab, 80, 32, 0
-	//
+	//	ボタンを設置する命令。この命令はボタンを設置するだけです。
+	//	mgButtonCalc命令でボタンのクリック判定を行い、mgButtonDrawでボタンの描画を行います。
+	//	p5 が 0ならば goto / 0以外ならば gosub として動作します。
 	//	この命令を実行すると、設置したボタンの[ボタンID](HSP標準のオブジェクトIDのようなもの)が
 	//	システム変数statに代入されています。
 	//----------------------------------------------------------------------------------------------
-	#deffunc mgButton str _txt, var _label, int _w, int _h, int _type
+	#deffunc _mgButton str _txt, var _label, int _x, int _y, int _w, int _h, int _type
 		//使用されていないインデックスを探す
 		Idx = -1
 		repeat ButtonMax
@@ -80,8 +86,8 @@
 			ButtonMax++
 		}
 		//ボタン情報をセット
-		ButtonPosX(Idx) = ginfo_cx
-		ButtonPosY(Idx) = ginfo_cy
+		ButtonPosX(Idx) = _x
+		ButtonPosY(Idx) = _y
 		ButtonText(Idx) = ""+_txt
 		ButtonSizeW(Idx) = _w
 		ButtonSizeH(Idx) = _h
@@ -95,33 +101,41 @@
 	//----------------------------------------------------------------------------------------------
 	//= ボタン内容変更命令
 	//----------------------------------------------------------------------------------------------
-	//	mgButtonSetText ボタンID, "text"
-	//		ボタンのテキストが"text"に変えます。
-	//	mgButtonSetPos	ボタンID, X, Y
-	//		ボタンのX座標, Y座標を変えます。
-	//	mgButtonSetSize	ボタンID, W, H
-	//		ボタンの横幅, 縦幅を変えます。
-	//	mgButtonSetLabel ボタンID, *label(変数)
-	//		ボタンのジャンプ先ラベルを変えます。*label は ラベルを代入した変数でなければなりません。
-	//	mgButtonSetType	ボタンID, Type
-	//		ボタンのジャンプタイプを変えます。0 = goto / 0以外 = gosub
+	//	mgButtonPrm ボタンID, "text", *label, p1, p2, p3, p4, p5
+	//
+	//	ボタンID以外のパラメータは、mgButton(設置命令)と同様です。
 	//----------------------------------------------------------------------------------------------
-	#deffunc mgButtonSetText int _id, str _txt
-		ButtonText(_id) = ""+_txt
-	return
-	#deffunc mgButtonSetPos int _id, int _x, int _y
-		ButtonPosX(_id) = _x
-		ButtonPosY(_id) = _y
-	return
-	#deffunc mgButtonSetSize int _id, int _w, int _h
-		ButtonSizeW(_id) = _w
-		ButtonSizeH(_id) = _h
-	return
-	#deffunc mgButtonSetLabel int _id, var _l
-		ButtonLabel(_id) = _l
-	return
-	#deffunc mgButtonType int _id, int _type
-		ButtonType(_id) = _type
+	//	内容を変更したいパラメータを入力してください。
+	//	パラメータを省略した部分は変更されません。
+	//
+	//	例：
+	//		mgButtonPrm 0, "OK", , , , , , 1
+	//
+	//	この例では、ボタンID[0]のボタンの テキスト と 挙動のタイプ のみを変更しています。
+	//----------------------------------------------------------------------------------------------
+	#deffunc _mgButtonPrm int _id, var _txt, var _label, var _x, var _y, var _w, var _h, var _type
+		//有効なIDかどうか
+		if(_id >= 0){
+			if(_id <= ButtonMax-1){
+				//そのボタンが生存しているかどうか
+				if(ButtonFlag(_id)==1){
+					//テキスト
+					if(vartype(_txt)==2){ButtonText(_id) = _txt}
+					//ラベル
+					if(vartype(_label)==1){ButtonLabel(_id) = _label}
+					//PosX
+					if(vartype(_x)==4){ButtonPosX(_id) = _x}
+					//PosY
+					if(vartype(_y)==4){ButtonPosY(_id) = _y}
+					//SizeW
+					if(vartype(_w)==4){ButtonSizeW(_id) = _w}
+					//SizeH
+					if(vartype(_h)==4){ButtonSizeH(_id) = _h}
+					//Type
+					if(vartype(_type)==4){ButtonType(_id) = _type}
+				}
+			}
+		}
 	return
 
 	//----------------------------------------------------------------------------------------------
@@ -150,6 +164,7 @@
 	//	mgButtonCalc
 	//----------------------------------------------------------------------------------------------
 	//	全てのボタンに対し、カーソル/クリック判定を行います。
+	//	ボタンがクリックされた時に、システム変数statへクリックしたボタンIDが代入されます。
 	//----------------------------------------------------------------------------------------------
 	#deffunc mgButtonCalc
 		getkey _click, 1 : if(_click==1) : click++ : else : click=0
@@ -168,8 +183,10 @@
 								ButtonHover(cnt) = 1
 								if(click == 1){
 									if(ButtonType(cnt) == 0){
+										SetStat@_mgButton_ cnt
 										goto ButtonLabel(cnt)
 									} else {
+										SetStat@_mgButton_ cnt
 										gosub ButtonLabel(cnt)
 									}
 								}
@@ -187,6 +204,7 @@
 	//	mgButtonDraw
 	//----------------------------------------------------------------------------------------------
 	//	全てのボタンを描画します。
+	//	ボタンIDが若いものが後ろに表示されます。
 	//----------------------------------------------------------------------------------------------
 	#deffunc mgButtonDraw
 		font "Arial", 14, 1
@@ -222,14 +240,13 @@ mgButtonInit 1
 //--------------------------------------------------------------------------------------------------
 #if 0
 	//ボタンを設置
-	pos 16, 16
-	lab = *__Enter : mgButton "Enter", lab, 64, 27, 1
-	pos 16, 51
-	lab = *__Clear : mgButton "Clear", lab, 64, 27, 1
-	ClearButtonId = stat
+	mgButton "Enter", *__Enter, 16, 16, 64, 27, 1
+
+	pos 16, 51	//第3,4パラメータを省略した場合はカレントポジションに設置
+	mgButton "Clear", *__Clear, , , 64, 27, 1
+
 	pos 16, 86
-	lab = *__Set : mgButton "Set", lab, 64, 27, 1
-	SetButtonId = stat
+	mgButton "Set", *__Prm, , , 64, 27, 1
 
 	//----------------------------------------------------------------------------------------------
 	//= メインループ
@@ -252,19 +269,15 @@ mgButtonInit 1
 	//= サブルーチン
 	//----------------------------------------------------------------------------------------------
 		*__Enter
-			dialog "[Enter] がクリックされました。"
+			dialog "[Enter] がクリックされました。\nボタンIDは"+stat+"です。"
 		return
 
 		*__Clear
-			mgButtonClear ClearButtonId
+			mgButtonClear stat
 		return
 
-		*__Set
-			lab = *__end
-			mgButtonSetText		SetButtonId, "End"
-			mgButtonSetPos		SetButtonId, 32, 86
-			mgButtonSetSize		SetButtonId, 256, 64
-			mgButtonSetLabel	SetButtonId, lab
+		*__Prm
+			mgButtonPrm stat, "End", *__End, 32, , 320, 128, 0
 		return
 
 		*__End
