@@ -1,0 +1,30 @@
+//--------------------------------------------------------------------------------------------------
+//= MapRuleCheck
+//--------------------------------------------------------------------------------------------------
+#module _MapRuleCheck_
+	#defcfunc MapRuleCheck
+		//return初期化
+		ret = 0
+		//敵の入り口(ENEMY_START)が塞がれていないかチェック
+		if( MapGoalDis@(ENEMY_START_X@, ENEMY_START_Y@) == -1 ){
+			ret = 1
+		}
+		//敵の入り口が塞がれていなければ、移動できない敵がいないかチェック
+		if( ret != 1 ){
+			logmes ""+ENEMY_MAX@
+			repeat ENEMY_MAX@
+				i = cnt
+				if( EnemyFlag@(i) == TRUE@ ){
+					x = int(EnemyPosX@(i)/TILE_SIZE_WH@)
+					y = int(EnemyPosY@(i)/TILE_SIZE_WH@)
+					x = limit(x, 1, MAP_SIZE_WH@-2)
+					y = limit(y, 0, MAP_SIZE_WH@-1)
+					if( MapGoalDis@(x, y) == -1 ){
+						ret = 1
+						break
+					}
+				}
+			loop
+		}
+	return ret
+#global

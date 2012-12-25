@@ -1,6 +1,8 @@
 //--------------------------------------------------------------------------------------------------
 //= calc.hsp
 //--------------------------------------------------------------------------------------------------
+//	キー入力の監視や計算処理
+//--------------------------------------------------------------------------------------------------
 
 	timer_start timer_cnt(), "計算"
 
@@ -26,29 +28,35 @@
 	//----------------------------------------------------------------------------------------------
 	//= マップエディット(上層チップ)
 	//----------------------------------------------------------------------------------------------
+		//カーソルがマップ内にあるか
 		if(CursorPosX != -1)&(CursorPosY != -1) {
-			//左クリック
-			if(GetKeyInput(MO_LEFT) != 0){
-				if(MapDataLower(CursorPosX, CursorPosY) == 0){
-					if(MapDataUpper(CursorPosX, CursorPosY) != 1){
-						MapDataUpper(CursorPosX, CursorPosY) = 1
+			x = CursorPosX : y = CursorPosY
+			//下層マップに障害物がないか
+			if(MapDataLower(x, y)== 0){
+				//左クリック
+				if(GetKeyInput(MO_LEFT) != 0){
+					if(MapDataUpper(x, y) != 1){
+						MapUndoSet x, y, MapDataUpper(x, y)
+						MapDataUpper(x, y) = 1
+						GoalDisCalc
+						//設置した上層チップがルール違反であればUndo
+						if(MapRuleCheck() == 1){
+							MapUndo
+						}
 					}
 				}
-			}
-			//右クリック
-			if(GetKeyInput(MO_RIGHT) != 0){
-				if(MapDataLower(CursorPosX, CursorPosY) == 0){
-					if(MapDataUpper(CursorPosX, CursorPosY) != 0){
-						MapDataUpper(CursorPosX, CursorPosY) = 0
+				//右クリック
+				if(GetKeyInput(MO_RIGHT) != 0){
+					x = CursorPosX : y = CursorPosY
+					if(MapDataLower(x, y) == 0){
+						if(MapDataUpper(x, y) != 0){
+							MapDataUpper(x, y) = 0
+							GoalDisCalc
+						}
 					}
 				}
 			}
 		}
-
-	//----------------------------------------------------------------------------------------------
-	//= 各座標のゴールまでの座標を取得(一時的)
-	//----------------------------------------------------------------------------------------------
-		GoalDisCalc
 
 	//----------------------------------------------------------------------------------------------
 	//= 敵の処理

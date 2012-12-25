@@ -1,0 +1,20 @@
+//--------------------------------------------------------------------------------------------------
+//= MapUndo
+//--------------------------------------------------------------------------------------------------
+#module _MapUndo_
+	#deffunc local MapUndoInit
+		dim GoalDisMemory,	MAP_SIZE_WH@, MAP_SIZE_WH@
+		MemorySize = MAP_SIZE_WH@*MAP_SIZE_WH@*4//int=4byte
+	return
+	#deffunc MapUndoSet int _x, int _y, int _id
+		UndoX = _x
+		UndoY = _y
+		UndoId = _id
+		memcpy GoalDisMemory, MapGoalDis@, MemorySize
+	return
+	#deffunc MapUndo
+		MapDataUpper@(UndoX, UndoY) = UndoId
+		memcpy MapGoalDis@, GoalDisMemory, MemorySize
+	return
+#global
+MapUndoInit@_MapUndo_
