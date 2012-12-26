@@ -1,0 +1,107 @@
+//--------------------------------------------------------------------------------------------------
+//= hjkMes
+//--------------------------------------------------------------------------------------------------
+#define hjkMes(%1, %2=ginfo_cx, %3=ginfo_cy, %4=0, %5=0)	_hjkMes %1, %2, %3, %4, %5
+#module _hjkMes_
+	//----------------------------------------------------------------------------------------------
+	//= モジュール内で使うAPI
+	//----------------------------------------------------------------------------------------------
+	#uselib "GDI32.DLL"
+	#func  GetTextExtentPoint32 "GetTextExtentPoint32A" int, int, int, int
+	//----------------------------------------------------------------------------------------------
+	//= 初期化命令(自動呼び出し)
+	//----------------------------------------------------------------------------------------------
+	#deffunc local _hjkMesInit
+		dim size, 2				//GetTextExtentPoint32で取得した文字サイズを格納する
+	return
+	//----------------------------------------------------------------------------------------------
+	//= 改良mes命令
+	//----------------------------------------------------------------------------------------------
+	//	hjkMes "strings", p1 , p2 , p3, p4
+	//
+	//	"strings"		: 表示するメッセージ
+	//	p1=?(ginfo_cx)	: X方向の描画位置
+	//	p2=?(ginfo_cy)	: Y方向の描画位置
+	//	p3=0～2(0)		: X方向の描画基点
+	//	p4=0～2(0)		: Y方向の描画基点
+	//----------------------------------------------------------------------------------------------
+	//	p1 / p2を省略した場合はカレントポジションへの描画が行われます。
+	//
+	//	p3 / p4 で描画位置に対する文字列の描画基点を設定します。
+	//	p3でX方向, p4でY方向の基点を設定できます。
+	//
+	//	p3=0 : 文字列の左端
+	//	p3=1 : 文字列の中央
+	//	p3=2 : 文字列の右端
+	//
+	//	p4=0 : 文字列の上端
+	//	p4=1 : 文字列の中央
+	//	p4=2 : 文字列の下端
+	//
+	//	この命令の描画基点は、複数行の文字列に対応しておりません。
+	//----------------------------------------------------------------------------------------------
+	#deffunc _hjkMes str _string, int _x, int _y, int _align, int _valign
+		string = _string
+		GetTextExtentPoint32 hdc, varptr(string), strlen(string), varptr(size)
+		x = _x : y = _y
+		if( _align == 1 ){x -= size(0)/2}
+		if( _align == 2 ){x -= size(0)}
+		if( _valign == 1 ){y -= size(1)/2}
+		if( _valign == 2 ){y -= size(1)}
+		pos x, y
+		mes ""+string
+	return
+#global
+_hjkMesInit@_hjkMes_
+
+//--------------------------------------------------------------------------------------------------
+//= 以下サンプル
+//--------------------------------------------------------------------------------------------------
+#if 0
+	//説明文字など
+	color 200,200,255:line 0,ginfo_winy/2,ginfo_winx,ginfo_winy/2:line ginfo_winx/2,0,ginfo_winx/2,ginfo_winy:color
+	pos 64, 64 : gosub *__PosCircle : pos 73, 54 : mes "描画位置"
+
+	//プロポーショナルフォントでも動作します
+	font "ＭＳ Ｐゴシック", 16
+
+	//左揃え
+	pos 64, ginfo_winy/2 : gosub *__PosCircle
+	hjkMes "Left", , , 0, 1
+	color 150,150,150:mes "[p3=0, p4=1]":color
+
+	//中央揃え
+	pos ginfo_winx/2, ginfo_winy/2 : gosub *__PosCircle
+	hjkMes "HotSoupProcessor", , , 1, 1
+	color 150,150,150:mes "[p3=1, p4=1]":color
+
+	//右揃え
+	pos ginfo_winx-64, ginfo_winy/2 : gosub *__PosCircle
+	hjkMes "Right", , , 2, 1
+	color 150,150,150:mes "[p3=2, p4=1]":color
+
+	//上揃え
+	pos ginfo_winx/2, 48 : gosub *__PosCircle
+	hjkMes "Top", , , 1, 0
+	color 150,150,150:mes "[p3=1, p4=0]":color
+
+	//下揃え
+	pos ginfo_winx/2, ginfo_winy-48 : gosub *__PosCircle
+	hjkMes "Bottom", , , 1, 2
+	color 150,150,150:mes "[p3=1, p4=2]":color
+
+	//右下揃え
+	pos ginfo_winx-64, ginfo_winy-48 : gosub *__PosCircle
+	hjkMes "Right+Bottom", , , 2, 2
+	color 150,150,150:mes "[p3=2, p4=2]":color
+
+
+	stop
+
+	//カレントポジションに●を描画
+	*__PosCircle
+		color 255
+		circle ginfo_cx-2, ginfo_cy-2, ginfo_cx+3, ginfo_cy+3
+		color
+	return
+#endif

@@ -12,28 +12,43 @@
 	//----------------------------------------------------------------------------------------------
 	//= 画像バッファ初期化
 	//----------------------------------------------------------------------------------------------
-		//マップチップ(下層)
-		celload "data/image/mapchip_lower_layer.png", SCR_MAPCHIP_LOWER
-		celdiv SCR_MAPCHIP_LOWER, TILE_SIZE_WH, TILE_SIZE_WH
 
-		//マップチップ(上層)
-		celload "data/image/mapchip_upper_layer.png", SCR_MAPCHIP_UPPER
-		celdiv SCR_MAPCHIP_UPPER, TILE_SIZE_WH, TILE_SIZE_WH
+		//------------------------------------------------------------------------------------------
+		//= マップチップ(下層)
+		//------------------------------------------------------------------------------------------
+			celload "data/image/mapchip_lower_layer.png", SCR_MAPCHIP_LOWER
+			celdiv SCR_MAPCHIP_LOWER, TILE_SIZE_WH, TILE_SIZE_WH
 
-		//下層マップコピー元バッファ
-		buffer SCR_MAPBUF_LOWER, TILE_SIZE_WH*MAP_SIZE_WH, TILE_SIZE_WH*MAP_SIZE_WH
-		repeat MAP_SIZE_WH
-			x = cnt
+		//------------------------------------------------------------------------------------------
+		//= マップチップ(上層)
+		//------------------------------------------------------------------------------------------
+			celload "data/image/mapchip_upper_layer.png", SCR_MAPCHIP_UPPER
+			celdiv SCR_MAPCHIP_UPPER, TILE_SIZE_WH, TILE_SIZE_WH
+
+		//------------------------------------------------------------------------------------------
+		//= 下層マップコピー元バッファ
+		//------------------------------------------------------------------------------------------
+			buffer SCR_MAPBUF_LOWER, TILE_SIZE_WH*MAP_SIZE_WH, TILE_SIZE_WH*MAP_SIZE_WH
 			repeat MAP_SIZE_WH
-				y = cnt
-				pos x*TILE_SIZE_WH, y*TILE_SIZE_WH
-				color ALPHA_COLOR: gmode 4, , , 256: celput SCR_MAPCHIP_LOWER, MapDataLower(x, y)
+				x = cnt
+				repeat MAP_SIZE_WH
+					y = cnt
+					pos x*TILE_SIZE_WH, y*TILE_SIZE_WH
+					color ALPHA_COLOR: gmode 4, , , 256: celput SCR_MAPCHIP_LOWER, MapDataLower(x, y)
+				loop
 			loop
-		loop
 
-		//キャラクター画像(とりあえずウォーリアーのみ)
-		celload "data/image/character_warrior.png", SCR_CHARACTER
-		celdiv SCR_CHARACTER, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH/2, CHARACTER_SIZE_WH/2
+		//------------------------------------------------------------------------------------------
+		//= キャラクター画像(とりあえずウォーリアーのみ)
+		//------------------------------------------------------------------------------------------
+			celload "data/image/character_warrior.png", SCR_CHARACTER
+			celdiv SCR_CHARACTER, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH/2, CHARACTER_SIZE_WH/2
+
+		//------------------------------------------------------------------------------------------
+		//= システムアイコン
+		//------------------------------------------------------------------------------------------
+			celload "data/image/system_icon.png", SCR_SYSTEM_ICON
+			celdiv SCR_SYSTEM_ICON, 
 
 	//----------------------------------------------------------------------------------------------
 	//= メインウィンドウ初期化
