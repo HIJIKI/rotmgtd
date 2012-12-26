@@ -29,8 +29,9 @@
 		#enum SCR_MAPCHIP_UPPER						//上層マップチップ
 		#enum SCR_MAPBUF_LOWER						//下層マップを展開しておき、メインウィンドウへ一括コピー
 		#enum SCR_SYSTEM_ICON						//システムアイコン
+		#enum SCR_BUTTON_ICON						//ボタンに使用するアイコン画像
 
-		#enum SCR_CHARACTER							//ウォーリアー(実際にはSCR_CHARACTER+WARRIORなどと書く(define_h.hspを参照))
+		#enum SCR_CHARACTER							//ウォーリアー(実際にはSCR_CHARACTER+WARRIORなどと書く)
 		#enum SCR_CHARACTER_KN						//ナイト
 		#enum SCR_CHARACTER_PA						//パラディン
 		#enum SCR_CHARACTER_RO						//ローグ
@@ -85,15 +86,22 @@
 	//----------------------------------------------------------------------------------------------
 	//= 描画に関する定数
 	//----------------------------------------------------------------------------------------------
-		#define ALPHA_COLOR			0,150,0						//各画像の透過色
-		#define MENU_BGCOLOR		54,54,54					//メニューの背景色
-		#define MENU_LIGHTCOLOR		84,84,84					//メニューの背景色(明)
-		#define MENU_TEXTCOLOR		179,179,179					//メニューの文字色
+		#define ALPHA_COLOR				0,150,0							//各画像の透過色
 
-		#const MENU_SIZE_W			200							//メニューの幅
-		#const MENU_SIZE_H			WINDOW_SIZE_H				//メニューの高さ
-		#const MENU_POS_X			WINDOW_SIZE_W-MENU_SIZE_W	//メニューのX位置
-		#const MENU_POS_Y			0							//メニューのY位置
+		#define BUTTON_ICON_SIZE_WH		26								//ボタンに使用するアイコン画像のサイズ(縦横共通)
+		#define BUTTON_BGCOLOR			255,255,255						//ボタンの背景色
+		#define BUTTON_BGCOLOR_HOVER	255,220,133						//ボタンの背景色
+		#define BUTTON_TEXTCOLOR		54,54,54						//ボタンの背景色
+		#define BUTTON_TEXTCOLOR_HOVER	80,80,80						//ボタンの背景色
+
+		#define MENU_BGCOLOR			54,54,54						//メニューの背景色
+		#define MENU_LIGHTCOLOR			84,84,84						//メニューの背景色(明)
+		#define MENU_TEXTCOLOR			179,179,179						//メニューの文字色
+
+		#const MENU_SIZE_W				200								//メニューの幅
+		#const MENU_SIZE_H				WINDOW_SIZE_H					//メニューの高さ
+		#const MENU_POS_X				WINDOW_SIZE_W-MENU_SIZE_W		//メニューのX位置
+		#const MENU_POS_Y				0								//メニューのY位置
 
 		#const SYSTEM_ICON_SIZE_WH		24								//システムアイコンのサイズ(縦横共通)
 		#const SYSTEM_MONEY_POS_X		MENU_POS_X+36					//システムアイコン[お金]枠のX位置

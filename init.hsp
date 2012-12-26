@@ -23,7 +23,7 @@
 		//= マップチップ(上層)
 		//------------------------------------------------------------------------------------------
 			celload "data/image/mapchip_upper_layer.png", SCR_MAPCHIP_UPPER
-			celdiv SCR_MAPCHIP_UPPER, TILE_SIZE_WH, TILE_SIZE_WH
+			celdiv SCR_MAPCHIP_UPPER, TILE_SIZE_WH+2, TILE_SIZE_WH+2, 1, 1
 
 		//------------------------------------------------------------------------------------------
 		//= 下層マップコピー元バッファ
@@ -48,13 +48,38 @@
 		//= システムアイコン
 		//------------------------------------------------------------------------------------------
 			celload "data/image/system_icon.png", SCR_SYSTEM_ICON
-			celdiv SCR_SYSTEM_ICON, 
+			celdiv SCR_SYSTEM_ICON, SYSTEM_ICON_SIZE_WH, SYSTEM_ICON_SIZE_WH, SYSTEM_ICON_SIZE_WH/2, SYSTEM_ICON_SIZE_WH/2
+
+		//------------------------------------------------------------------------------------------
+		//= ボタンアイコン
+		//------------------------------------------------------------------------------------------
+			celload "data/image/button_icon.png", SCR_BUTTON_ICON
+			celdiv SCR_BUTTON_ICON, BUTTON_ICON_SIZE_WH, BUTTON_ICON_SIZE_WH, BUTTON_ICON_SIZE_WH/2, BUTTON_ICON_SIZE_WH/2
 
 	//----------------------------------------------------------------------------------------------
 	//= メインウィンドウ初期化
 	//----------------------------------------------------------------------------------------------
 		screen SCR_MAIN, WINDOW_SIZE_W, WINDOW_SIZE_H
 
+		//アイテムセレクトボタンを追加(一時的)
+		bg=MENU_LIGHTCOLOR : bgh=BUTTON_BGCOLOR_HOVER : tx=0,0,0 : txh=0,0,0
+		mgButtonColor bg, bgh, tx, txh
+		size = 36 : margin = 4
+		xsize = size*5+margin*4
+		x = MENU_POS_X+(MENU_SIZE_W/2)-(xsize/2) : y = MENU_POS_Y+80
+		k = 0
+		repeat 3
+			i = cnt
+			repeat 5
+				j = cnt
+				if( k == 0 ){ wid = SCR_SYSTEM_ICON }
+				mgButton "", *__MapLowerReset, x+(size+margin)*j, y+(size+margin)*i, size, size, 1, SCR_BUTTON_ICON, k
+				k++
+			loop
+		loop
+
 		//リセットボタンを追加(一時的)
 		pos MENU_POS_X+MENU_SIZE_W/2-64/2, ginfo_winy-64
+		bg=BUTTON_BGCOLOR : bgh=BUTTON_BGCOLOR_HOVER : tx=BUTTON_TEXTCOLOR : txh=BUTTON_TEXTCOLOR_HOVER
+		mgButtonColor bg, bgh, tx, txh
 		mgButton "Reset", *__MapLowerReset, , , 64, 27, 1
