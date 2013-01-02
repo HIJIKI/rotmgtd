@@ -11,9 +11,27 @@
 			end
 
 	//----------------------------------------------------------------------------------------------
-	//= マップ上層レイヤーをリセット
+	//= リセットボタン(debug用)
 	//----------------------------------------------------------------------------------------------
 		*__MapLowerReset
-			dim MapDataUpper, MAP_SIZE_WH, MAP_SIZE_WH
+			//上層チップ
+			dim MapDataUpper,	MAP_SIZE_WH, MAP_SIZE_WH
 			GoalDisCalc
+			//キャラクター
+			dim CharacterFlag,	CHARACTER_MAX
+			dim MapCharacter,	MAP_SIZE_WH, MAP_SIZE_WH
+		return
+
+	//----------------------------------------------------------------------------------------------
+	//= アイテムセレクトボタンが押された時
+	//----------------------------------------------------------------------------------------------
+		*__ItemSelectButton
+			//選択していたボタンの色を戻す
+			bg=MENU_LIGHTCOLOR : bgh=BUTTON_BGCOLOR_HOVER : tx=0,0,0 : txh=0,0,0
+			mgButtonColor bg, bgh, tx, txh, ItemSelectButtonId(CurrentSelectItem)
+			//選択したボタンの色を変更する
+			bg=BUTTON_BGCOLOR_HOVER : bgh=BUTTON_BGCOLOR_HOVER : tx=0,0,0 : txh=0,0,0
+			mgButtonColor bg, bgh, tx, txh, ItemSelectButtonId(stat)
+			//選択アイテムを変更
+			CurrentSelectItem = stat
 		return

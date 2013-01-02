@@ -11,7 +11,6 @@
 		}
 		//敵の入り口が塞がれていなければ、移動できない敵がいないかチェック
 		if( ret != 1 ){
-			logmes ""+ENEMY_MAX@
 			repeat ENEMY_MAX@
 				i = cnt
 				if( EnemyFlag@(i) == TRUE@ ){

@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------------------
-//= rotmg風ボタンモジュール v3
+//= rotmg風ボタンモジュール v4
 //--------------------------------------------------------------------------------------------------
 //	MAD GOD風のボタンサービスを提供するモジュールです。
 //	HSP標準の button 命令のような、複数ウィンドウへの設置は対応しておりません。
@@ -13,6 +13,7 @@
 #define	mgButton(%1="", %2, %3=ginfo_cx, %4=ginfo_cy, %5=54, %6=27, %7=0, %8=-1, %9=-1) /**/ _2=%2: _mgButton ""+%1, _2, %3, %4, %5, %6, %7, %8, %9
 #define	mgButtonPrm(%1, %2=-1, %3=-1, %4="", %5="", %6="", %7="", %8="", %9="", %10="") /**/ _2=%2: _3=%3: _4=%4: _5=%5: _6=%6: _7=%7: _8=%8: _9=%9: _10=%10: _mgButtonPrm %1, _2, _3, _4, _5, _6, _7, _8, _9, _10
 #define mgButtonClear(%1=-1) _mgButtonClear %1
+#define mgButtonColor(%1, %2, %3, %4, %5=-1)	/**/	_mgButtonColor %1, %2, %3, %4, %5
 
 #module _mgButton_
 	//----------------------------------------------------------------------------------------------
@@ -67,7 +68,7 @@
 
 		 //カレントカラーをデフォルト設定に
 		 bg=DEFAULT_BG_COLOR:bgh=DEFAULT_BG_COLOR_HOVER:tx=DEFAULT_TEXT_COLOR:txh=DEFAULT_TEXT_COLOR_HOVER
-		 mgButtonColor bg, bgh, tx, txh
+		 mgButtonColor@ bg, bgh, tx, txh
 	return
 
 	//----------------------------------------------------------------------------------------------
@@ -169,22 +170,34 @@
 	return
 
 	//----------------------------------------------------------------------------------------------
-	//= ボタンのカレントカラー設定命令
+	//= ボタンのカラー設定命令
 	//----------------------------------------------------------------------------------------------
-	//	mgButtonColor p1, p2, p3, p4
+	//	mgButtonColor p1, p2, p3, p4, p5
 	//
 	//	p1 = 背景色
 	//	p2 = Hover時の背景色
 	//	p3 = 文字色
 	//	p4 = Hover時の文字色
-	//	これらのパラメータは全て(r, g, b)の形式で代入された配列変数でなければなりません。
-	//	設置後のボタンの色を変更することはできません。
+	//	p5 = ボタンID
+	//	p1～p4は全て(r, g, b)の形式で代入された配列変数でなければなりません。
+	//	p5を省略しなかった場合は既存のボタンの色を変更する。
 	//----------------------------------------------------------------------------------------------
-	#deffunc mgButtonColor array _bg, array _bgh, array _tx, array _txh
-		CurrentBgColor			= _bg(R), _bg(G), _bg(B)
-		CurrentBgColorHover		= _bgh(R), _bgh(G), _bgh(B)
-		CurrentTextColor		= _tx(R), _tx(G), _tx(B)
-		CurrentTextColorHover	= _txh(R), _txh(G), _txh(B)
+	#deffunc _mgButtonColor array _bg, array _bgh, array _tx, array _txh, int _id
+		if( _id == -1 ){
+			CurrentBgColor			= _bg(R), _bg(G), _bg(B)
+			CurrentBgColorHover		= _bgh(R), _bgh(G), _bgh(B)
+			CurrentTextColor		= _tx(R), _tx(G), _tx(B)
+			CurrentTextColorHover	= _txh(R), _txh(G), _txh(B)
+		} else {
+			if( _id <= ButtonMax-1){
+				if( ButtonFlag(_id) == 1 ){
+					ButtonBgColor(0, _id) = _bg(R), _bg(G), _bg(B)
+					ButtonBgColorHover(0, _id) = _bgh(R), _bgh(G), _bgh(B)
+					ButtonTextColor(0, _id) = _tx(R), _tx(G), _tx(B)
+					ButtonTextColorHover(0, _id) = _txh(R), _txh(G), _txh(B)
+				}
+			}
+		}
 	return
 
 	//----------------------------------------------------------------------------------------------
@@ -302,14 +315,15 @@ mgButtonInit 1
 //--------------------------------------------------------------------------------------------------
 #if 0
 	//ボタンを設置
-	bg=84,84,84:bgh=128,128,128:tx=0,0,0:txh=0,0,0:mgButtonColor bg, bgh, tx, txh
 	mgButton "Enter", *__Enter, 16, 16, 64, 27, 1
 
-	pos 16, 51	//第3,4パラメータを省略した場合はカレントポジションに設置
+	//色を変えてみる
+	bg=84,84,84:bgh=128,128,128:tx=0,0,0:txh=0,0,0:mgButtonColor bg, bgh, tx, txh
+	pos 16, 51
+	//第3,4パラメータを省略した場合はカレントポジションに設置
 	mgButton "Clear", *__Clear, , , 64, 27, 1
 
-	pos 16, 86
-	mgButton "Set", *__Prm, , , 64, 27, 1
+	mgButton "Set", *__Prm, 16, 86, 64, 27, 1
 
 	//----------------------------------------------------------------------------------------------
 	//= メインループ
@@ -340,6 +354,10 @@ mgButtonInit 1
 		return
 
 		*__Prm
+			//設置済みボタンの色変更
+			bg=128,32,16: bgh=200,64,32: tx=0,0,0: txh=64,64,64
+			mgButtonColor bg, bgh, tx, txh, stat
+			//内容の変更
 			mgButtonPrm stat, "End", *__End, 32, , 320, 128, 0, bgc
 		return
 

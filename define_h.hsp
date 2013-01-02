@@ -15,7 +15,6 @@
 	//= ゲーム全体に関する定数
 	//----------------------------------------------------------------------------------------------
 		#define FPS				60					//プログラムの実行FPS
-//		#define DEBUG_FLAG		TRUE				//デバッグモードフラグ
 
 	//----------------------------------------------------------------------------------------------
 	//= ウィンドウに関する定数
@@ -56,6 +55,7 @@
 	//= キャラクターに関する定数
 	//----------------------------------------------------------------------------------------------
 		#define CHARACTER_SIZE_WH	72				//キャラクターのサイズ(縦横共通)
+		#define CHARACTER_MAX		16				//キャラクターの同時表示最大数
 
 		#enum WARRIOR	=0							//ウォーリアー
 		#enum KNIGHT								//ナイト
@@ -72,6 +72,7 @@
 		#enum PRIEST								//プリースト
 		#enum SORCERER								//ソーサラー
 		#enum CHARACTER_CLASS_MAX					//職業の数
+		#const WALL_BLOCK	CHARACTER_CLASS_MAX		//上層壁ブロック
 
 	//----------------------------------------------------------------------------------------------
 	//= 敵に関する定数
@@ -90,9 +91,9 @@
 
 		#define BUTTON_ICON_SIZE_WH		26								//ボタンに使用するアイコン画像のサイズ(縦横共通)
 		#define BUTTON_BGCOLOR			255,255,255						//ボタンの背景色
-		#define BUTTON_BGCOLOR_HOVER	255,220,133						//ボタンの背景色
-		#define BUTTON_TEXTCOLOR		54,54,54						//ボタンの背景色
-		#define BUTTON_TEXTCOLOR_HOVER	80,80,80						//ボタンの背景色
+		#define BUTTON_BGCOLOR_HOVER	255,220,133						//ボタンの背景色(hover)
+		#define BUTTON_TEXTCOLOR		54,54,54						//ボタンの文字色
+		#define BUTTON_TEXTCOLOR_HOVER	80,80,80						//ボタンの文字色(hover)
 
 		#define MENU_BGCOLOR			54,54,54						//メニューの背景色
 		#define MENU_LIGHTCOLOR			84,84,84						//メニューの背景色(明)

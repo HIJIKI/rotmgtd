@@ -1,0 +1,39 @@
+//--------------------------------------------------------------------------------------------------
+//= character.hsp
+//--------------------------------------------------------------------------------------------------
+//	キャラクターの 出現 / 攻撃 / 特技 / 被ダメージ / 死亡 などを管理する
+//--------------------------------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------------------------
+	//= 設置処理
+	//----------------------------------------------------------------------------------------------
+		//選択中アイテムが壁ブロックではない
+		if( CurrentSelectItem != WALL_BLOCK ){
+			//カーソルがマップ内にあるか
+			if( CursorPosX != -1)&(CursorPosY != -1 ) {
+				x = CursorPosX : y = CursorPosY
+				//下層マップに障害物がないか
+				if( MapDataLower(x, y) == 0 ){
+					//上層マップに障害物がないか
+					if( MapDataUpper(x, y) == FALSE ){
+						//左クリック
+						if(GetKeyInput(MO_LEFT) != 0){
+							//そこにキャラクターが既にいないか
+							if( MapCharacter(x, y) == FALSE ){
+								repeat CHARACTER_MAX
+									if( CharacterFlag(cnt) == FALSE ){
+										CharacterPosX(cnt) = double(x*TILE_SIZE_WH+TILE_SIZE_WH/2)
+										CharacterPosY(cnt) = double(y*TILE_SIZE_WH+TILE_SIZE_WH/2)
+										CharacterTarget(cnt) = -1
+										CharacterClass(cnt) = CurrentSelectItem
+										CharacterFlag(cnt) = TRUE
+										MapCharacter(x, y) = TRUE
+										break
+									}
+								loop
+							}
+						}
+					}
+				}
+			}
+		}

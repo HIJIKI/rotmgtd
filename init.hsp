@@ -39,10 +39,14 @@
 			loop
 
 		//------------------------------------------------------------------------------------------
-		//= キャラクター画像(とりあえずウォーリアーのみ)
+		//= キャラクター画像
 		//------------------------------------------------------------------------------------------
-			celload "data/image/character_warrior.png", SCR_CHARACTER
-			celdiv SCR_CHARACTER, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH/2, CHARACTER_SIZE_WH/2
+			repeat CHARACTER_CLASS_MAX
+				path = "data/image/character_"+CharacterClassName(cnt)+".png"
+				id = SCR_CHARACTER+cnt
+				celload path, id
+				celdiv SCR_CHARACTER+cnt, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH, CHARACTER_SIZE_WH/2, CHARACTER_SIZE_WH/2
+			loop
 
 		//------------------------------------------------------------------------------------------
 		//= システムアイコン
@@ -73,13 +77,14 @@
 			repeat 5
 				j = cnt
 				if( k == 0 ){ wid = SCR_SYSTEM_ICON }
-				mgButton "", *__MapLowerReset, x+(size+margin)*j, y+(size+margin)*i, size, size, 1, SCR_BUTTON_ICON, k
+				mgButton "", *__ItemSelectButton, x+(size+margin)*j, y+(size+margin)*i, size, size, 1, SCR_BUTTON_ICON, k
+				ItemSelectButtonId(k) = stat
 				k++
 			loop
 		loop
 
 		//リセットボタンを追加(一時的)
 		pos MENU_POS_X+MENU_SIZE_W/2-64/2, ginfo_winy-64
-		bg=BUTTON_BGCOLOR : bgh=BUTTON_BGCOLOR_HOVER : tx=BUTTON_TEXTCOLOR : txh=BUTTON_TEXTCOLOR_HOVER
+		bg=BUTTON_BGCOLOR : bgh=BUTTON_BGCOLOR_HOVER : tx=BUTTON_TEXTCOLOR : txh=BUTTON_TEXTCOLOR
 		mgButtonColor bg, bgh, tx, txh
 		mgButton "Reset", *__MapLowerReset, , , 64, 27, 1

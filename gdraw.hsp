@@ -34,14 +34,28 @@
 		timer_end timer_cnt()
 
 	//----------------------------------------------------------------------------------------------
-	//= “GƒLƒƒƒ‰ƒNƒ^[‚Ì•`‰æ
+	//= “G‚Ì•`‰æ
 	//----------------------------------------------------------------------------------------------
-		timer_start timer_cnt(), "“GƒLƒƒƒ‰•`‰æ"
+		timer_start timer_cnt(), "“G‚Ì•`‰æ"
 		sysfont:color 255
 		repeat ENEMY_MAX
 			if(EnemyFlag(cnt) == TRUE){
 				pos EnemyPosX(cnt)-7, EnemyPosY(cnt)-8
 				mes "œ"
+			}
+		loop
+		timer_end timer_cnt()
+
+	//----------------------------------------------------------------------------------------------
+	//= ƒLƒƒƒ‰ƒNƒ^[‚Ì•`‰æ
+	//----------------------------------------------------------------------------------------------
+		timer_start timer_cnt(), "ƒLƒƒƒ‰ƒNƒ^[‚Ì•`‰æ"
+		color ALPHA_COLOR
+		gmode 4, , , 256
+		repeat CHARACTER_MAX
+			if( CharacterFlag(cnt) == TRUE ){
+				pos CharacterPosX(cnt), CharacterPosY(cnt)
+				celput SCR_CHARACTER+CharacterClass(cnt), 0
 			}
 		loop
 		timer_end timer_cnt()

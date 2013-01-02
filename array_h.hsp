@@ -15,10 +15,26 @@
 	//----------------------------------------------------------------------------------------------
 	//= 敵に関する配列
 	//----------------------------------------------------------------------------------------------
-		dim EnemyFlag,			ENEMY_MAX						//敵の生存フラグ
-		ddim EnemyPosX,			ENEMY_MAX						//敵のX座標
-		ddim EnemyPosY,			ENEMY_MAX						//敵のY座標
-		ddim EnemyMoveAng,		ENEMY_MAX						//敵の移動方向(Angle)
-		ddim EnemyMoveSpd,		ENEMY_MAX						//敵の移動速度(Speed)
-		dim EnemyMoveTargetX,	ENEMY_MAX						//敵の目標X座標(マス)
-		dim EnemyMoveTargetY,	ENEMY_MAX						//敵の目標Y座標(マス)
+		dim EnemyFlag,			ENEMY_MAX						//生存フラグ
+		ddim EnemyPosX,			ENEMY_MAX						//X座標
+		ddim EnemyPosY,			ENEMY_MAX						//Y座標
+		ddim EnemyMoveAng,		ENEMY_MAX						//移動方向(Angle)
+		ddim EnemyMoveSpd,		ENEMY_MAX						//移動速度(Speed)
+		dim EnemyMoveTargetX,	ENEMY_MAX						//移動目標X座標(マス)
+		dim EnemyMoveTargetY,	ENEMY_MAX						//移動目標Y座標(マス)
+
+	//----------------------------------------------------------------------------------------------
+	//= キャラクターに関する配列
+	//----------------------------------------------------------------------------------------------
+		dim MapCharacter,		MAP_SIZE_WH, MAP_SIZE_WH		//マップ上のキャラクター配列(Mapと付くがキャラ配列)
+		dim CharacterFlag,		CHARACTER_MAX					//生存フラグ
+		ddim CharacterPosX,		CHARACTER_MAX					//X座標
+		ddim CharacterPosY,		CHARACTER_MAX					//Y座標
+		dim CharacterTarget,	CHARACTER_MAX					//攻撃する敵のID
+		dim CharacterClass,		CHARACTER_MAX					//職業
+		CharacterClassName = "wizard", "priest", "archer", "rogue", "warrior", "knight", "necromancer", "huntress", "assasin", "ninja", "paladin", "mystic", "sorcerer", "trickstar"
+
+	//----------------------------------------------------------------------------------------------
+	//= ボタンに関する配列
+	//----------------------------------------------------------------------------------------------
+		dim ItemSelectButtonId,	CHARACTER_CLASS_MAX				//アイテムセレクトボタンの数
