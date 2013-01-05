@@ -5,10 +5,12 @@
 //--------------------------------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------------------------
-	//= 設置処理
+	//= 設置/選択処理
 	//----------------------------------------------------------------------------------------------
-		//選択中アイテムが壁ブロックではない
-		if( CurrentSelectItem != WALL_BLOCK ){
+		//左クリック
+		if( GetKeyInput(MO_LEFT) == 1 ){
+			//選択中キャラクターを解除
+			CurrentSelectCharacter = -1
 			//カーソルがマップ内にあるか
 			if( CursorPosX != -1)&(CursorPosY != -1 ) {
 				x = CursorPosX : y = CursorPosY
@@ -16,10 +18,10 @@
 				if( MapDataLower(x, y) == 0 ){
 					//上層マップに障害物がないか
 					if( MapDataUpper(x, y) == FALSE ){
-						//左クリック
-						if(GetKeyInput(MO_LEFT) != 0){
-							//そこにキャラクターが既にいないか
-							if( MapCharacter(x, y) == FALSE ){
+						//そこにキャラクターが既にいないか
+						if( MapCharacter(x, y) == -1 ){
+							//選択中アイテムが壁ブロックではない
+							if( CurrentSelectItem != WALL_BLOCK ){
 								repeat CHARACTER_MAX
 									if( CharacterFlag(cnt) == FALSE ){
 										CharacterPosX(cnt) = double(x*TILE_SIZE_WH+TILE_SIZE_WH/2)
@@ -27,13 +29,44 @@
 										CharacterTarget(cnt) = -1
 										CharacterClass(cnt) = CurrentSelectItem
 										CharacterFlag(cnt) = TRUE
-										MapCharacter(x, y) = TRUE
+										CharacterLevel(cnt) = 1
+										MapCharacter(x, y) = cnt
+										//設置したキャラクターを選択
+										CurrentSelectCharacter = cnt
 										break
 									}
 								loop
 							}
+						} else {
+							//キャラクターがいた場合は選択
+							CurrentSelectCharacter = MapCharacter(x, y)
 						}
 					}
 				}
+			}
+		}
+
+	//----------------------------------------------------------------------------------------------
+	//= 削除処理
+	//----------------------------------------------------------------------------------------------
+		if( CurrentSelectCharacter != -1 ){
+			if( GetKeyInput(KB_D) == 1 ){
+				id = CurrentSelectCharacter
+				CharacterFlag(id) = FALSE
+				f = 0
+				repeat MAP_SIZE_WH
+					x = cnt
+					repeat MAP_SIZE_WH
+						y = cnt
+						if( MapCharacter(x, y) == id ){
+							MapCharacter(x, y) = -1
+							f = 1
+							break
+						}
+					loop
+					//2重ループを抜ける
+					if( f == 1 ){break}
+				loop
+				CurrentSelectCharacter = -1
 			}
 		}

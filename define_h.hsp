@@ -95,6 +95,9 @@
 		#define BUTTON_TEXTCOLOR		54,54,54						//ボタンの文字色
 		#define BUTTON_TEXTCOLOR_HOVER	80,80,80						//ボタンの文字色(hover)
 
+		#define CHARACTER_ZOOM_DEFAULT	1.0								//キャラクターの描画拡大率(通常時)
+		#define CHARACTER_ZOOM_SELECTED	1.25							//キャラクターの描画拡大率(選択中)
+
 		#define MENU_BGCOLOR			54,54,54						//メニューの背景色
 		#define MENU_LIGHTCOLOR			84,84,84						//メニューの背景色(明)
 		#define MENU_TEXTCOLOR			179,179,179						//メニューの文字色
@@ -104,8 +107,16 @@
 		#const MENU_POS_X				WINDOW_SIZE_W-MENU_SIZE_W		//メニューのX位置
 		#const MENU_POS_Y				0								//メニューのY位置
 
-		#const SYSTEM_ICON_SIZE_WH		24								//システムアイコンのサイズ(縦横共通)
+		#define SYSTEM_FONTNAME			"Arial"							//システムフォントの名前
+		#define SYSTEM_FONTSIZE			16								//システムフォントのサイズ
+		#define SYSTEM_FONTOPTION		1								//システムフォントのオプション
+
+		#const SYSTEM_ICON_SIZE_WH		32								//システムアイコンのサイズ(縦横共通)
 		#const SYSTEM_MONEY_POS_X		MENU_POS_X+36					//システムアイコン[お金]枠のX位置
 		#const SYSTEM_MONEY_POS_Y		MENU_POS_Y+24					//システムアイコン[お金]枠のY位置
 		#const SYSTEM_MONEY_SIZE_W		128								//システムアイコン[お金]枠の幅
 		#const SYSTEM_MONEY_SIZE_H		27								//システムアイコン[お金]枠の高さ
+		#const SYSTEM_STATUS_POS_X		MENU_POS_X+2					//選択中キャラクターの情報X位置
+		#const SYSTEM_STATUS_POS_Y		MENU_POS_Y+195					//選択中キャラクターの情報Y位置
+		#const SYSTEM_STATUS_SIZE_W		MENU_SIZE_W-4					//選択中キャラクターの情報サイズW
+		#const SYSTEM_STATUS_SIZE_H		166								//選択中キャラクターの情報サイズH

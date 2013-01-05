@@ -20,6 +20,14 @@
 			//キャラクター
 			dim CharacterFlag,	CHARACTER_MAX
 			dim MapCharacter,	MAP_SIZE_WH, MAP_SIZE_WH
+			repeat MAP_SIZE_WH
+				i = cnt
+				repeat MAP_SIZE_WH
+					j = cnt
+					MapCharacter(i, j) = -1
+				loop
+			loop
+			CurrentSelectCharacter = -1
 		return
 
 	//----------------------------------------------------------------------------------------------

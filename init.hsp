@@ -70,13 +70,12 @@
 		mgButtonColor bg, bgh, tx, txh
 		size = 36 : margin = 4
 		xsize = size*5+margin*4
-		x = MENU_POS_X+(MENU_SIZE_W/2)-(xsize/2) : y = MENU_POS_Y+80
+		x = MENU_POS_X+(MENU_SIZE_W/2)-(xsize/2) : y = MENU_POS_Y+75
 		k = 0
 		repeat 3
 			i = cnt
 			repeat 5
 				j = cnt
-				if( k == 0 ){ wid = SCR_SYSTEM_ICON }
 				mgButton "", *__ItemSelectButton, x+(size+margin)*j, y+(size+margin)*i, size, size, 1, SCR_BUTTON_ICON, k
 				ItemSelectButtonId(k) = stat
 				k++

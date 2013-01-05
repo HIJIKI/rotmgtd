@@ -26,13 +26,24 @@
 	//----------------------------------------------------------------------------------------------
 	//= キャラクターに関する配列
 	//----------------------------------------------------------------------------------------------
-		dim MapCharacter,		MAP_SIZE_WH, MAP_SIZE_WH		//マップ上のキャラクター配列(Mapと付くがキャラ配列)
 		dim CharacterFlag,		CHARACTER_MAX					//生存フラグ
 		ddim CharacterPosX,		CHARACTER_MAX					//X座標
 		ddim CharacterPosY,		CHARACTER_MAX					//Y座標
 		dim CharacterTarget,	CHARACTER_MAX					//攻撃する敵のID
 		dim CharacterClass,		CHARACTER_MAX					//職業
-		CharacterClassName = "wizard", "priest", "archer", "rogue", "warrior", "knight", "necromancer", "huntress", "assasin", "ninja", "paladin", "mystic", "sorcerer", "trickstar"
+		dim CharacterLevel,		CHARACTER_MAX					//レベル
+
+		dim MapCharacter,		MAP_SIZE_WH, MAP_SIZE_WH		//マップ上のキャラクター配列(Mapと付くがキャラ配列)
+		repeat MAP_SIZE_WH
+			i = cnt
+			repeat MAP_SIZE_WH
+				j = cnt
+				MapCharacter(i, j) = -1
+			loop
+		loop
+		CurrentSelectCharacter = -1								//現在選択中のキャラクターID(-1=未選択)
+
+		CharacterClassName = "Wizard", "Priest", "Archer", "Rogue", "Warrior", "Knight", "Necromancer", "Huntress", "Assasin", "Ninja", "Paladin", "Mystic", "Sorcerer", "Trickstar"
 
 	//----------------------------------------------------------------------------------------------
 	//= ボタンに関する配列

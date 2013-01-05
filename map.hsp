@@ -15,7 +15,7 @@
 				//下層マップに障害物がないか
 				if(MapDataLower(x, y)== 0){
 					//そこにキャラクターがいないか
-					if( MapCharacter(x, y) == FALSE ){
+					if( MapCharacter(x, y) == -1 ){
 						//左クリック
 						if(GetKeyInput(MO_LEFT) != 0){
 							if(MapDataUpper(x, y) != 1){

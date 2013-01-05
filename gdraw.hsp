@@ -58,6 +58,11 @@
 				celput SCR_CHARACTER+CharacterClass(cnt), 0
 			}
 		loop
+		//選択中キャラクターの枠
+		if( CurrentSelectCharacter != -1 ) {
+			pos CharacterPosX(CurrentSelectCharacter), CharacterPosY(CurrentSelectCharacter)
+			celput SCR_SYSTEM_ICON, 1, 1.0, 1.0
+		}
 		timer_end timer_cnt()
 
 	//----------------------------------------------------------------------------------------------
@@ -90,8 +95,29 @@
 			celput SCR_SYSTEM_ICON, 0
 			//文字
 			color MENU_TEXTCOLOR
-			font "Arial", 16, 1
+			font SYSTEM_FONTNAME, SYSTEM_FONTSIZE, SYSTEM_FONTOPTION
 			hjkMes "99999999", SYSTEM_MONEY_POS_X+SYSTEM_MONEY_SIZE_W-16, SYSTEM_MONEY_POS_Y+SYSTEM_MONEY_SIZE_H/2, 2, 1
+
+		//------------------------------------------------------------------------------------------
+		//= 選択中のキャラクター情報
+		//------------------------------------------------------------------------------------------
+			if( CurrentSelectCharacter != -1 ){
+				x = SYSTEM_STATUS_POS_X : y = SYSTEM_STATUS_POS_Y
+				id = CurrentSelectCharacter
+				//枠
+				color MENU_LIGHTCOLOR
+				ChamferFill x, y, SYSTEM_STATUS_SIZE_W, SYSTEM_STATUS_SIZE_H
+				//アイコン
+				color ALPHA_COLOR
+				gmode 4, , , 256
+				pos x+28, y+28
+				celput SCR_CHARACTER+CharacterClass(id), 3*3
+				//職業+レベル
+				font SYSTEM_FONTNAME, SYSTEM_FONTSIZE, SYSTEM_FONTOPTION
+				color MENU_TEXTCOLOR
+				pos x+64, y+28
+				hjkMes ""+CharacterClassName(CharacterClass(id))+" Lv"+CharacterLevel(id), x+120, y+28, 1, 1
+			}
 
 		//------------------------------------------------------------------------------------------
 		//= ボタンの描画

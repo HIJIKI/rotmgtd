@@ -13,9 +13,11 @@
 		#enum	MO_LEFT			=0
 		#enum	MO_RIGHT
 		#enum	KB_D
+		#enum	KB_F1
 		AddKeyInput 1										//マウスの左ボタン
 		AddKeyInput 2										//マウスの右ボタン
-		AddKeyInput 'D'										//キーボード:D(debug用)
+		AddKeyInput 'D'										//キーボード:D
+		AddKeyInput 112										//キーボード:F1
 
 	//----------------------------------------------------------------------------------------------
 	//= 計算/処理に関するモジュール
